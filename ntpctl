@@ -1,0 +1,46 @@
+#! /bin/sh
+
+set -e
+
+TIMESERVER=${2:-ntp.ubuntu.com}
+
+usage()
+{
+	echo "usage: $(basename $0) <command> <option>"
+	echo
+	echo "    commands:"
+	echo "    set <ntp server> (just calling set without option defaults"
+	echo "                      to ntp.ubuntu.com)"
+	echo "    off              (turns off ntp sever entries in the config)"
+	echo
+	exit 0
+}
+
+if [ "$(id -u)" != "0" ]; then
+	echo "please use sudo"
+	exit 0
+fi
+
+if ! cat /etc/systemd/timesyncd.conf >/dev/null 2>&1; then
+	echo "Error: timeserver-control interface not connected !"
+	echo "please run: snap connect ntpctl:timeserver-control"
+	exit 0
+fi
+
+case $1 in
+    set)
+      echo "Setting ntp server to $TIMESERVER"
+	  sed "s/^#*NTP=.*$/NTP=$TIMESERVER/" /etc/systemd/timesyncd.conf >$SNAP_DATA/timesyncd.conf
+	  cat $SNAP_DATA/timesyncd.conf >/etc/systemd/timesyncd.conf
+	  echo "please reboot to make the change take effect"
+      ;;
+    off)
+      echo "turning ntp server off in the config"
+	  sed 's/^#*NTP=.*$/#NTP=/' /etc/systemd/timesyncd.conf >$SNAP_DATA/timesyncd.conf
+	  cat $SNAP_DATA/timesyncd.conf >/etc/systemd/timesyncd.conf
+	  echo "please reboot to make the change take effect"
+      ;;
+    *)
+      usage
+      ;;
+esac
