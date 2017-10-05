@@ -23,7 +23,7 @@ fi
 
 if ! cat /etc/systemd/timesyncd.conf >/dev/null 2>&1; then
 	echo "Error: timeserver-control interface not connected !"
-	echo "please run: snap connect ntpctl:timeserver-control"
+	echo "please run: snap connect ntpcontrol:timeserver-control"
 	exit 0
 fi
 
