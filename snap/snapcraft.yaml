@@ -1,4 +1,4 @@
-name: ntpctl
+name: ntpcontrol
 version: '0.1'
 summary: Simple snap to set an ntp server address
 description: |
@@ -10,8 +10,8 @@ confinement: strict
 architectures: [ all ]
 
 apps:
-  ntpctl:
-    command: ntpctl
+  ntpcontrol:
+    command: ntpcontrol
     plugs: [ timeserver-control ]
 
 parts:
@@ -19,4 +19,4 @@ parts:
     plugin: nil
     install: |
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin/
-      cp ntpctl $SNAPCRAFT_PART_INSTALL/bin/
+      cp ntpcontrol $SNAPCRAFT_PART_INSTALL/bin/
