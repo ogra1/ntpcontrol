@@ -1,0 +1,16 @@
+#! /bin/sh
+
+set -e
+
+# is our interface connected already ?
+if ! cat /etc/systemd/timesyncd.conf >/dev/null 2>&1; then
+	exit 0
+fi
+
+# did the user set a value for "ntpserver" ?
+TIMESERVER="$(snapctl get ntpserver)"
+
+if [ -n "$TIMESERVER" ]; then
+    sed "s/^#*NTP=.*$/NTP=$TIMESERVER/" /etc/systemd/timesyncd.conf >$SNAP_DATA/timesyncd.conf
+    cat $SNAP_DATA/timesyncd.conf >/etc/systemd/timesyncd.conf
+fi

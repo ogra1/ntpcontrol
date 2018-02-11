@@ -9,6 +9,10 @@ grade: stable
 confinement: strict
 architectures: [ all ]
 
+hooks:
+  configure:
+    plugs: [ timeserver-control, network-bind ]
+
 apps:
   ntpcontrol:
     command: ntpcontrol
